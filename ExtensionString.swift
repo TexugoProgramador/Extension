@@ -122,7 +122,7 @@ extension String {
         }
     }
     var htmlParaString: String {
-        return htmlToAttributedString?.string ?? ""
+        return htmlParaAttributedString?.string ?? ""
     }
     
     
