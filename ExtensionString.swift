@@ -6,10 +6,12 @@
 //  Copyright © 2019 humberto Lima. All rights reserved.
 //
 
+
 import UIKit
 
 extension String {
     
+    //valida e-mail exigindo texto antes e depois de uma @ e um .
     func isEmailValido() -> Bool {
         if self != "" {
             let emailFormat = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
@@ -45,6 +47,7 @@ extension String {
         }
     }
     
+    // função de validação de senha exigindo regras minímas
     func isSenhaValida() -> (Bool, String) {
         guard self != "" else { return (false, "Senha vazia") }
         
@@ -62,6 +65,7 @@ extension String {
         return (true, "Senha válida")
     }
     
+    // valida se o CPF digitado é válido ou não
     var isCPFValido: Bool {
         let cpf = self.onlyNumbers()
         guard cpf.count == 11 else { return false }
@@ -112,7 +116,7 @@ extension String {
         }
     }
     
-    
+    // Converte um HTML em um texto para ser exibido em textView
     var htmlParaAttributedString: NSAttributedString? {
         guard let data = data(using: .utf8) else { return NSAttributedString() }
         do {
@@ -125,5 +129,61 @@ extension String {
         return htmlParaAttributedString?.string ?? ""
     }
     
+}
+
+extension UIImageView {
+    // carrega uma imagem vindo de uma url
+    func carregaImagem(urlImagem: String) -> UIImage{
+        let ImageTemp = UIImage()
+        if urlImagem != "" {
+            var data = Data()
+            do {
+                try data = Data(contentsOf: URL(string: urlImagem)!)
+                return UIImage(data: data)!
+            }catch {
+                return ImageTemp
+            }
+        }else{
+            return ImageTemp
+        }
+    }
     
+    // quando recebe uma String em base 64 de umaimagem essa função converte em uma UIImage
+    func geraImagemDeString(stringRecebida: String) -> UIImage {
+        let dataDecoded : Data = Data(base64Encoded: stringRecebida, options: .ignoreUnknownCharacters)!
+        let decodedimage = UIImage(data: dataDecoded) ?? UIImage()
+        return decodedimage
+    }
+}
+
+extension UIImage {
+    
+    // gera uma string
+    func gera64Imagem(imageRecebido: UIImage) -> String {
+        let imageData = imageRecebido.pngData()! as NSData
+        let strBase64 = imageData.base64EncodedString(options: .lineLength64Characters)
+        return strBase64
+    }
+}
+
+extension UIViewController {
+    // função que gera um alerta padrão do sistema
+    func alerta(title: String, mensagem:String){
+        let alert = UIAlertController(title: title, message: mensagem, preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+}
+
+
+extension UITextField{
+    // cria um IBInspectable para poder usar uma cor diference no placeholder dos textFields
+    @IBInspectable var placeHolderColor: UIColor? {
+        get {
+            return self.placeHolderColor
+        }
+        set {
+            self.attributedPlaceholder = NSAttributedString(string:self.placeholder != nil ? self.placeholder! : "", attributes:[NSAttributedString.Key.foregroundColor: newValue!])
+        }
+    }
 }
