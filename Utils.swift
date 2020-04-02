@@ -189,7 +189,7 @@ extension UITextField{
 }
 
 @IBDesignable
-class botaoArredondado: UIButton {
+class BotaoCustomizado: UIButton {
     @IBInspectable var cornerRadiusValue: CGFloat = 10.0 {
         didSet {
             setUpView()
@@ -206,5 +206,38 @@ class botaoArredondado: UIButton {
     func setUpView() {
         self.layer.cornerRadius = self.cornerRadiusValue
         self.clipsToBounds = true
+    }
+}
+
+@IBDesignable
+class TextFieldSublinhada: UITextField {
+    
+    @IBInspectable var cor: UIColor?{
+        didSet {
+            setUpView()
+        }
+    }
+    
+    @IBInspectable var espessura: Int = 1{
+        didSet {
+            setUpView()
+        }
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        setUpView()
+    }
+    
+    override func prepareForInterfaceBuilder() {
+        super.prepareForInterfaceBuilder()
+        setUpView()
+    }
+    
+    func setUpView() {
+        let labelTemp = UILabel(frame: CGRect(x: 0, y: self.frame.height, width: self.frame.width * 1.19, height: CGFloat(espessura)))
+        labelTemp.backgroundColor = cor ?? UIColor.black
+        self.addSubview(labelTemp)
+        self.borderStyle = .none
     }
 }
