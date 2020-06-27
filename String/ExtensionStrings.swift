@@ -1,16 +1,14 @@
 //
-//  ExtensionString.swift
-//  testeProjeto
+//  ExtensionStrings.swift
+//  TesteExtensions
 //
-//  Created by humberto Lima on 22/11/19.
-//  Copyright © 2019 humberto Lima. All rights reserved.
+//  Created by humberto Lima on 27/06/20.
+//  Copyright © 2020 humberto Lima. All rights reserved.
 //
 
-
-import UIKit
+import Foundation
 
 extension String {
-    
     //valida e-mail exigindo texto antes e depois de uma @ e um .
     func isEmailValido() -> Bool {
         if self != "" {
@@ -125,124 +123,8 @@ extension String {
             return NSAttributedString()
         }
     }
+    
     var htmlParaString: String {
         return htmlParaAttributedString?.string ?? ""
     }
-    
-}
-
-extension UIImageView {
-    // carrega uma imagem vindo de uma url
-    func carregaImagem(urlImagem: String) -> UIImage{
-        let ImageTemp = UIImage()
-        if urlImagem != "" {
-            var data = Data()
-            do {
-                try data = Data(contentsOf: URL(string: urlImagem)!)
-                return UIImage(data: data)!
-            }catch {
-                return ImageTemp
-            }
-        }else{
-            return ImageTemp
-        }
-    }
-    
-    // quando recebe uma String em base 64 de umaimagem essa função converte em uma UIImage
-    func geraImagemDeString(stringRecebida: String) -> UIImage {
-        let dataDecoded : Data = Data(base64Encoded: stringRecebida, options: .ignoreUnknownCharacters)!
-        let decodedimage = UIImage(data: dataDecoded) ?? UIImage()
-        return decodedimage
-    }
-}
-
-extension UIImage {
-    
-    // gera uma string
-    func gera64Imagem(imageRecebido: UIImage) -> String {
-        let imageData = imageRecebido.pngData()! as NSData
-        let strBase64 = imageData.base64EncodedString(options: .lineLength64Characters)
-        return strBase64
-    }
-}
-
-extension UIViewController {
-    // função que gera um alerta padrão do sistema
-    func alerta(title: String, mensagem:String){
-        let alert = UIAlertController(title: title, message: mensagem, preferredStyle: UIAlertController.Style.alert)
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
-    }
-}
-
-
-extension UITextField{
-    // cria um IBInspectable para poder usar uma cor diference no placeholder dos textFields
-    @IBInspectable var placeHolderColor: UIColor? {
-        get {
-            return self.placeHolderColor
-        }
-        set {
-            self.attributedPlaceholder = NSAttributedString(string:self.placeholder != nil ? self.placeholder! : "", attributes:[NSAttributedString.Key.foregroundColor: newValue!])
-        }
-    }
-}
-
-@IBDesignable
-class BotaoCustomizado: UIButton {
-    @IBInspectable var cornerRadiusValue: CGFloat = 10.0 {
-        didSet {
-            setUpView()
-        }
-    }
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        setUpView()
-    }
-    override func prepareForInterfaceBuilder() {
-        super.prepareForInterfaceBuilder()
-        setUpView()
-    }
-    func setUpView() {
-        self.layer.cornerRadius = self.cornerRadiusValue
-        self.clipsToBounds = true
-    }
-}
-
-@IBDesignable
-class TextFieldSublinhada: UITextField {
-
-    //    Modo de usar
-    //    override func viewDidAppear(_ animated: Bool) {
-    //        seuCampo.setUpView()
-    //    }
-        
-        @IBInspectable var cor: UIColor?{
-            didSet {
-                setUpView()
-            }
-        }
-        
-        @IBInspectable var espessura: Int = 1{
-            didSet {
-                setUpView()
-            }
-        }
-        
-        override func awakeFromNib() {
-            super.awakeFromNib()
-            setUpView()
-        }
-        
-        override func prepareForInterfaceBuilder() {
-            super.prepareForInterfaceBuilder()
-            setUpView()
-        }
-        
-        func setUpView() {
-            let labelTemp = UILabel(frame: CGRect(x: 0, y: self.frame.height, width: self.frame.width, height: CGFloat(espessura)))
-            labelTemp.backgroundColor = cor ?? UIColor.black
-            self.addSubview(labelTemp)
-            self.borderStyle = .none
-        }
 }
