@@ -36,7 +36,7 @@ extension UIViewController: UITextFieldDelegate {
             return false
         }
         
-        if textField.TipoMascaraUsar == 1 {
+        if textField.TipoMascaraUsar == 1 { // Mascara de Telefone
             if (textField.text?.count)! == 1 {
                 if (textField.text?.contains("(") ?? false) {
                     textField.text = ""
@@ -48,15 +48,31 @@ extension UIViewController: UITextFieldDelegate {
                     textField.text = "(\(textField.text!)) "
                 }
             } else if (textField.text?.count)! == 9 {
-                textField.text = "\(textField.text!)-" //there we are ading - in textfield
-                
+                textField.text = "\(textField.text!)-"
             } else if (textField.text?.count)! > 13 {
                 return false
             }else{
                 return true
             }
             return true
-        }else if textField.TipoMascaraUsar == 2 {
+            
+        }else if textField.TipoMascaraUsar == 2 { // CPF
+            if textField.text?.count == 3 {
+                textField.text = "\(textField.text!)."
+                return true
+            }else if textField.text?.count == 7 {
+                textField.text = "\(textField.text!)."
+                return true
+            }else if textField.text?.count == 11 {
+                textField.text = "\(textField.text!)."
+                return true
+            }else if (textField.text?.count ?? 0) >= 14 {
+                return false
+            }else{
+                return true
+            }
+        }else if textField.TipoMascaraUsar == 3 { // mascara dinheiro
+            textField.text = (textField.text ?? "").replacingOccurrences(of: ".", with: ",")
             if (textField.text?.count)! == 1 {
                 textField.text = "R$ \(textField.text!)"
             }else if (textField.text?.count)! == 10 {
@@ -64,9 +80,37 @@ extension UIViewController: UITextFieldDelegate {
             } else if (textField.text?.count)! > 12 {
                 return false
             }else{
-                return true
+                if (textField.text ?? "").contains(",") {
+                    let temp = (textField.text ??  "").split(separator: ",")
+                    if temp.count > 1 {
+                        if temp[1].count >= 2 {
+                            return false
+                        }else{
+                            return true
+                        }
+                    }else{
+                        return true
+                    }
+                }else{
+                    return true
+                }
             }
             return true
+        }else if textField.TipoMascaraUsar == 4 { // RG
+            if textField.text?.count == 2 {
+                textField.text = "\(textField.text!)."
+                return true
+            }else if textField.text?.count == 6 {
+                textField.text = "\(textField.text!)."
+                return true
+            }else if textField.text?.count == 10 {
+                textField.text = "\(textField.text!)"
+                return true
+            }else if (textField.text?.count ?? 0) >= 13 {
+                return false
+            }else{
+                return true
+            }
         }else{
             return true
         }
